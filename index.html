@@ -97,6 +97,7 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-
   .preview{min-height:50vh}
 }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 <div id="app">
@@ -128,6 +129,12 @@ body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-
       </div>
 
       <button class="gen-btn" id="genBtn" onclick="generate()">生成设计</button>
+      <div class="section" id="historySection" style="display:none">
+        <div class="section-label">HISTORY</div>
+        <div class="section-title">设计历史</div>
+        <div id="historyList" style="display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+      <button class="gen-btn" id="saveBtn" onclick="saveCurrentDesign()" style="background:transparent;border:1px solid var(--ink10);color:var(--ink60);margin-top:8px;display:none">💾 保存到云端</button>
     </div>
   </div>
 
@@ -255,6 +262,8 @@ function generate(){
     frame.srcdoc=generatedCode;
     document.getElementById('loading').classList.remove('show');
     document.getElementById('genBtn').disabled=false;
+    document.getElementById('saveBtn').style.display='block';
+    loadHistory();
   },800+Math.random()*1200);
 }
 
@@ -332,7 +341,8 @@ h1 .accent{color:var(--accent)}
 .stat-item .label{font-size:13px;color:var(--ink60)}
 footer{padding:48px;border-top:1px solid var(--ink10);text-align:center;font-size:12px;color:var(--ink30)}
 @media(max-width:768px){.feat-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}nav .links{display:none}}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
 <nav><div class="logo">${productName.toUpperCase()}</div><div class="links"><a href="#">功能</a><a href="#">定价</a><a href="#">关于</a></div></nav>
 <section class="hero">
 <div class="badge">${productName.toUpperCase()} · 重新定义</div>
@@ -395,7 +405,8 @@ body{background:${bg};color:${ink};font-family:${style.font};display:flex;align-
 .list-item .info .name{font-size:14px;font-weight:500;color:${screenInk}}
 .list-item .info .desc{font-size:12px;color:${isColorDark(screenBg)?'#888':'#999'}}
 .list-item .arrow{color:${isColorDark(screenBg)?'#555':'#ccc'}}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
 <div class="phone">
 <div class="notch"></div>
 <div class="status-bar"><span>9:41</span><span>5G ◼</span></div>
@@ -455,7 +466,8 @@ body{background:${bg};color:${ink};font-family:${style.font};padding:60px;-webki
 .tl-item .title{font-weight:500;margin-bottom:4px}
 .tl-item .desc{font-size:13px;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};line-height:1.6}
 .footer{text-align:center;padding-top:40px;border-top:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.08)':'rgba('+hexToRgb(ink)+',0.08)'};font-size:11px;color:${isDark?'rgba('+hexToRgb(ink)+',0.25)':'rgba('+hexToRgb(ink)+',0.25)'};letter-spacing:0.1em}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
 <div class="container">
 <div class="header">
 <div class="tag">DATA VISUALIZATION</div>
@@ -510,7 +522,8 @@ body{background:${bg};color:${ink};font-family:${style.font};overflow:hidden;hei
 @keyframes particleFly{0%{opacity:0;transform:translateY(0)}10%{opacity:0.6}90%{opacity:0.6}100%{opacity:0;transform:translateY(-100vh)}}
 .corner{position:absolute;font-size:10px;letter-spacing:0.2em;color:${isColorDark(bg)?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};font-family:monospace}
 .corner.tl{top:24px;left:24px}.corner.tr{top:24px;right:24px}.corner.bl{bottom:24px;left:24px}.corner.br{bottom:24px;right:24px}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
 <div class="stage">
 <div class="particles" id="particles"></div>
 <div class="ring"></div><div class="ring"></div><div class="ring"></div>
@@ -549,7 +562,8 @@ h2{font-size:clamp(28px,4vw,48px);font-weight:300;margin-bottom:20px}
 .controls{position:fixed;bottom:32px;right:32px;display:flex;gap:8px;z-index:100}
 .ctrl-btn{width:40px;height:40px;border-radius:50%;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};background:transparent;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};cursor:pointer;font-size:16px;transition:all 0.3s}
 .ctrl-btn:hover{border-color:${accent};color:${accent}}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
 <div class="slide active" id="s0"><div class="slide-num">01 / 04</div><div class="slide-badge">PRESENTATION</div><h1>重新想象<br><span class="accent">设计流程</span></h1><div class="desc">${prompt.slice(0,50)||'用 AI 的力量，让每个人都能成为设计师'}</div></div>
 <div class="slide" id="s1"><div class="slide-num">02 / 04</div><div class="slide-badge">THE PROBLEM</div><h2>传统设计流程的困境</h2><div class="grid-3"><div class="grid-item"><div class="gi-icon">⏰</div><h4>周期漫长</h4><p>从需求到交付动辄数周</p></div><div class="grid-item"><div class="gi-icon">💰</div><h4>成本高昂</h4><p>设计团队人力成本持续攀升</p></div><div class="grid-item"><div class="gi-icon">🔄</div><h4>反复修改</h4><p>沟通成本高，迭代效率低</p></div></div></div>
 <div class="slide" id="s2"><div class="slide-num">03 / 04</div><div class="slide-badge">SOLUTION</div><h2>一句话，<span style="color:${accent}">交付设计</span></h2><div class="desc">输入意图 → 选择风格 → AI 生成 → 直接交付<br>3 到 30 分钟，从想法到成品</div></div>
@@ -600,7 +614,8 @@ body{background:${bg};color:${ink};font-family:${style.font};padding:60px;-webki
 .badge-accent{background:${accent}20;color:${accent}}
 .badge-outline{border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};color:${isDark?'rgba('+hexToRgb(ink)+',0.6)':'rgba('+hexToRgb(ink)+',0.6)'}'}
 .footer{text-align:center;padding-top:40px;border-top:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.06)':'rgba('+hexToRgb(ink)+',0.06)'};font-size:11px;color:${isDark?'rgba('+hexToRgb(ink)+',0.2)':'rgba('+hexToRgb(ink)+',0.2)'};letter-spacing:0.1em;font-family:monospace}
-</style></head><body>
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head><body>
 <div class="container">
 <div class="brand-hero"><div class="name">${name} <span class="accent">·</span></div><div class="tagline">${prompt.slice(0,30)||'创新驱动，设计赋能'}</div></div>
 <div class="section"><div class="section-label">COLOR PALETTE</div><div class="color-row">
@@ -641,6 +656,81 @@ function openNew(){
   const w=window.open('','_blank');
   w.document.write(generatedCode);
   w.document.close();
+}
+
+
+// === Supabase Integration ===
+const SUPABASE_URL = 'https://ogmrdaptcnprdlkmhpxy.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9nbXJkYXB0Y25wcmRsa21ocHh5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAwMzg0NzIsImV4cCI6MjA5NTYxNDQ3Mn0.IPAapCE_go5-DQz3m_ApUEPfGs6KI-eY4phOSK0PLT0';
+const supabase = window.supabase ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+
+async function saveDesign(prompt, style, palette, scene, code) {
+    if (!supabase) return null;
+    const { data, error } = await supabase.from('designs').insert([
+        { prompt, style, palette, scene, code }
+    ]).select();
+    if (error) { console.error('Save error:', error); return null; }
+    return data[0];
+}
+
+async function loadDesigns() {
+    if (!supabase) return [];
+    const { data, error } = await supabase.from('designs').select('*').order('created_at', { ascending: false }).limit(20);
+    if (error) { console.error('Load error:', error); return []; }
+    return data || [];
+}
+
+async function deleteDesign(id) {
+    if (!supabase) return false;
+    const { error } = await supabase.from('designs').delete().eq('id', id);
+    return !error;
+}
+
+
+
+async function saveCurrentDesign() {
+    const prompt = document.getElementById('promptInput').value.trim();
+    if (!prompt || !generatedCode) return;
+    const btn = document.getElementById('saveBtn');
+    btn.textContent = '保存中...';
+    btn.disabled = true;
+    const result = await saveDesign(prompt, currentStyle, currentPalette, currentScene, generatedCode);
+    if (result) {
+        btn.textContent = '✅ 已保存';
+        setTimeout(() => { btn.textContent = '💾 保存到云端'; btn.disabled = false; }, 2000);
+        loadHistory();
+    } else {
+        btn.textContent = '❌ 保存失败';
+        setTimeout(() => { btn.textContent = '💾 保存到云端'; btn.disabled = false; }, 2000);
+    }
+}
+
+async function loadHistory() {
+    const designs = await loadDesigns();
+    const section = document.getElementById('historySection');
+    const list = document.getElementById('historyList');
+    if (designs.length === 0) { section.style.display = 'none'; return; }
+    section.style.display = 'block';
+    list.innerHTML = designs.map(d => 
+        '<div class="scene-item" onclick="loadFromHistory(\''+d.id+'\')">' +
+        '<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+d.prompt.substring(0,40)+'</span>' +
+        '<span class="tag">'+d.style+'</span></div>'
+    ).join('');
+    window._designHistory = designs;
+}
+
+function loadFromHistory(id) {
+    const d = (window._designHistory || []).find(x => x.id === id);
+    if (!d) return;
+    document.getElementById('promptInput').value = d.prompt;
+    selectStyle(d.style);
+    selectPalette(d.palette);
+    selectScene(d.scene);
+    generatedCode = d.code;
+    const frame = document.getElementById('previewFrame');
+    frame.style.display = 'block';
+    frame.srcdoc = generatedCode;
+    document.getElementById('emptyState').style.display = 'none';
 }
 
 // Init
