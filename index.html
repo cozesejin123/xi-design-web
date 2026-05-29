@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Xi Design · 打字。回车。一份能交付的设计。</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #000000;
+  --ink: #FFFFFF;
+  --ink-80: rgba(255,255,255,0.82);
+  --ink-60: rgba(255,255,255,0.58);
+  --muted: rgba(255,255,255,0.40);
+  --dim: rgba(255,255,255,0.18);
+  --hairline: rgba(255,255,255,0.12);
+  --accent: #D97757;
+  --accent-deep: #B85D3D;
+  --serif-en: "Source Serif 4", Georgia, serif;
+  --serif-cn: "Noto Serif SC", "Songti SC", serif;
+  --sans: "Inter", -apple-system, "PingFang SC", sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+body::after {
+  content: '';
+  position: fixed; inset: 0;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.4'/></svg>");
+  opacity: 0.02;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 1000;
+}
+.watermark {
+  position: fixed; top: 24px; left: 32px;
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.2em; color: rgba(255,255,255,0.12);
+  text-transform: uppercase; z-index: 999;
+  pointer-events: none;
+}
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 20px 40px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--hairline);
+}
+nav .logo {
+  font-family: var(--mono); font-size: 14px;
+  letter-spacing: 0.15em; color: var(--accent);
+}
+nav .links { display: flex; gap: 32px; }
+nav .links a {
+  color: var(--ink-60); text-decoration: none;
+  font-size: 13px; letter-spacing: 0.05em;
+  transition: color 0.3s;
+}
+nav .links a:hover { color: var(--ink); }
+.hero {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 120px 40px 80px;
+  position: relative;
+}
+.hero-badge {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.3em; color: var(--accent);
+  margin-bottom: 40px;
+  padding: 8px 20px;
+  border: 1px solid rgba(217,119,87,0.3);
+  border-radius: 100px;
+}
+.hero-title {
+  font-family: var(--serif-cn);
+  font-size: clamp(48px, 8vw, 96px);
+  font-weight: 400;
+  line-height: 1.15;
+  margin-bottom: 8px;
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeUp 1s ease forwards;
+}
+.hero-title.accent {
+  color: var(--accent);
+  animation-delay: 0.2s;
+}
+.hero-desc {
+  max-width: 560px;
+  font-size: 17px; line-height: 1.8;
+  color: var(--ink-60);
+  margin-top: 32px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.4s forwards;
+}
+.hero-actions {
+  display: flex; gap: 16px; margin-top: 48px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.6s forwards;
+}
+.btn-primary, .btn-secondary {
+  padding: 14px 36px;
+  border-radius: 8px;
+  font-size: 15px; font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+}
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+}
+.btn-primary:hover { background: var(--accent-deep); transform: translateY(-2px); }
+.btn-secondary {
+  background: transparent;
+  color: var(--ink-60);
+  border: 1px solid var(--hairline);
+}
+.btn-secondary:hover { border-color: var(--ink-60); color: var(--ink); }
+.scroll-hint {
+  position: absolute; bottom: 40px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: var(--dim); font-size: 12px;
+  animation: pulse 2s ease infinite;
+}
+.scroll-hint .arrow {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, transparent, var(--dim));
+}
+section {
+  padding: 120px 40px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.section-label {
+  font-family: var(--mono); font-size: 11px;
+  letter-spacing: 0.3em; color: var(--accent);
+  margin-bottom: 16px;
+}
+.section-title {
+  font-family: var(--serif-cn);
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 400;
+  margin-bottom: 64px;
+  line-height: 1.3;
+}
+.school-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 48px;
+}
+.school-card {
+  padding: 24px;
+  border: 1px solid var(--hairline);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.school-card:hover, .school-card.active {
+  border-color: var(--accent);
+  background: rgba(217,119,87,0.06);
+}
+.school-card .icon { font-size: 28px; margin-bottom: 12px; }
+.school-card .name { font-weight: 500; margin-bottom: 4px; }
+.school-card .count { font-size: 13px; color: var(--muted); }
+.philosophy-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+.philosophy-card {
+  display: flex; gap: 16px;
+  padding: 20px;
+  border: 1px solid var(--hairline);
+  border-radius: 10px;
+  transition: all 0.3s;
+}
+.philosophy-card:hover { border-color: rgba(255,255,255,0.2); }
+.philosophy-card .num {
+  font-family: var(--mono); font-size: 13px;
+  color: var(--accent); min-width: 28px;
+  padding-top: 2px;
+}
+.philosophy-card .name { font-weight: 500; margin-bottom: 4px; }
+.philosophy-card .desc { font-size: 14px; color: var(--ink-60); line-height: 1.6; }
+.capability-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 20px;
+}
+.capability-card {
+  padding: 32px;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  transition: all 0.4s;
+  position: relative;
+  overflow: hidden;
+}
+.capability-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.capability-card:hover::before { opacity: 1; }
+.capability-card:hover { border-color: rgba(217,119,87,0.3); transform: translateY(-4px); }
+.capability-card .icon { font-size: 36px; margin-bottom: 16px; }
+.capability-card .name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.capability-card .time {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--accent); margin-bottom: 12px;
+}
+.capability-card .desc { font-size: 14px; color: var(--ink-60); line-height: 1.7; }
+.workflow-steps {
+  display: flex; flex-direction: column; gap: 0;
+  position: relative;
+  padding-left: 40px;
+}
+.workflow-steps::before {
+  content: '';
+  position: absolute; left: 15px; top: 0;
+  width: 1px; height: 100%;
+  background: linear-gradient(to bottom, var(--accent), var(--hairline), transparent);
+}
+.step {
+  position: relative;
+  padding: 24px 0;
+}
+.step::before {
+  content: attr(data-step);
+  position: absolute; left: -40px; top: 24px;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--mono); font-size: 12px; color: var(--accent);
+}
+.step .title { font-weight: 600; font-size: 17px; margin-bottom: 6px; }
+.step .desc { font-size: 14px; color: var(--ink-60); line-height: 1.7; max-width: 600px; }
+.demo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 20px;
+}
+.demo-card {
+  position: relative;
+  border: 1px solid var(--hairline);
+  border-radius: 14px;
+  overflow: hidden;
+  aspect-ratio: 16/10;
+  cursor: pointer;
+  transition: all 0.4s;
+}
+.demo-card:hover { border-color: rgba(217,119,87,0.4); transform: translateY(-4px); }
+.demo-card .demo-bg {
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(217,119,87,0.1), rgba(217,119,87,0.02));
+}
+.demo-card .demo-content {
+  position: absolute; inset: 0;
+  padding: 28px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+}
+.demo-card .demo-tag {
+  font-family: var(--mono); font-size: 10px;
+  letter-spacing: 0.2em; color: var(--accent);
+  margin-bottom: 8px;
+}
+.demo-card .demo-name { font-size: 20px; font-weight: 500; }
+.demo-card .demo-cta {
+  margin-top: 12px;
+  font-size: 13px; color: var(--ink-60);
+  display: flex; align-items: center; gap: 6px;
+}
+.demo-card .demo-cta .arrow { transition: transform 0.3s; }
+.demo-card:hover .demo-cta .arrow { transform: translateX(4px); }
+.cta-section {
+  text-align: center;
+  padding: 160px 40px;
+  position: relative;
+}
+.cta-section::before {
+  content: '';
+  position: absolute; top: 50%; left: 50%;
+  width: 600px; height: 600px;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(217,119,87,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.cta-title {
+  font-family: var(--serif-cn);
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.cta-desc {
+  font-size: 17px; color: var(--ink-60);
+  max-width: 480px; margin: 0 auto 40px;
+  line-height: 1.8;
+}
+footer {
+  padding: 48px 40px;
+  border-top: 1px solid var(--hairline);
+  display: flex; justify-content: space-between; align-items: center;
+  max-width: 1200px; margin: 0 auto;
+}
+footer .left {
+  font-family: var(--mono); font-size: 12px;
+  color: var(--dim); letter-spacing: 0.1em;
+}
+footer .right { display: flex; gap: 24px; }
+footer .right a {
+  color: var(--muted); text-decoration: none;
+  font-size: 13px; transition: color 0.3s;
+}
+footer .right a:hover { color: var(--ink); }
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  nav .links { display: none; }
+  section { padding: 80px 20px; }
+  .hero { padding: 100px 20px 60px; }
+  .philosophy-list { grid-template-columns: 1fr; }
+  .capability-grid { grid-template-columns: 1fr; }
+  .demo-grid { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 16px; text-align: center; }
+}
+</style>
+</head>
+<body>
+<div class="watermark">XI DESIGN</div>
+<nav>
+  <div class="logo">XI DESIGN</div>
+  <div class="links">
+    <a href="#philosophy">设计哲学</a>
+    <a href="#capabilities">核心能力</a>
+    <a href="#workflow">工作流</a>
+    <a href="#demos">演示</a>
+  </div>
+</nav>
+<section class="hero">
+  <div class="hero-badge">XI DESIGN</div>
+  <h1 class="hero-title">打字。回车。</h1>
+  <h1 class="hero-title accent">一份能交付的设计。</h1>
+  <p class="hero-desc">一句话让 AI 在 3–30 分钟内交付产品发布动画、可点击原型、可编辑 PPT、印刷级信息图。不是「对 AI 来说不错」的质量——看起来像真正的设计团队做的。</p>
+  <div class="hero-actions">
+    <a href="#philosophy" class="btn-primary">开始探索</a>
+    <a href="#demos" class="btn-secondary">查看演示</a>
+  </div>
+  <div class="scroll-hint">
+    <span>SCROLL</span>
+    <div class="arrow"></div>
+  </div>
+</section>
+<section id="philosophy">
+  <div class="reveal">
+    <div class="section-label">DESIGN PHILOSOPHY</div>
+    <h2 class="section-title">20 条设计哲学 · 5 大流派</h2>
+  </div>
+  <div class="reveal school-grid" id="schoolGrid"></div>
+  <div class="reveal philosophy-list" id="philosophyList"></div>
+</section>
+<section id="capabilities">
+  <div class="reveal">
+    <div class="section-label">CAPABILITIES</div>
+    <h2 class="section-title">六大核心能力</h2>
+  </div>
+  <div class="reveal capability-grid" id="capabilityGrid"></div>
+</section>
+<section id="workflow">
+  <div class="reveal">
+    <div class="section-label">WORKFLOW</div>
+    <h2 class="section-title">初级设计师工作流</h2>
+  </div>
+  <div class="reveal workflow-steps" id="workflowSteps"></div>
+</section>
+<section id="demos">
+  <div class="reveal">
+    <div class="section-label">DEMOS</div>
+    <h2 class="section-title">看看它做了什么</h2>
+  </div>
+  <div class="reveal demo-grid" id="demoGrid"></div>
+</section>
+<section class="cta-section">
+  <div class="reveal">
+    <h2 class="cta-title">一句话，交付。</h2>
+    <p class="cta-desc">给你的 Agent 一句话，3 到 30 分钟后，你收到一份能交付的设计。</p>
+    <a href="https://github.com/cozesejin123/xi-design-web" class="btn-primary" target="_blank">GitHub 仓库 →</a>
+  </div>
+</section>
+<footer>
+  <div class="left">XI DESIGN · MIT License</div>
+  <div class="right">
+    <a href="https://github.com/alchaincyf/huashu-design" target="_blank">原项目 Huashu Design</a>
+    <a href="https://github.com/cozesejin123/xi-design-web" target="_blank">GitHub</a>
+  </div>
+</footer>
+<script>
+const schools = [
+  { icon: '🏛️', name: '信息建筑派', count: 4, philosophies: [
+    { num: '01', name: '字体即语言，网格即思想', desc: '极度克制的颜色，瑞士网格系统的现代演绎，字体排印作为主要视觉语言' },
+    { num: '02', name: '让数据成为可触摸的风景', desc: '地图学思维应用于信息设计，算法生成的有机图形' },
+    { num: '03', name: '设计不是装饰，是内容的建筑', desc: '极端的内容层级清晰度，性能即美学' },
+    { num: '04', name: '每一个像素都必须承载信息', desc: '科学期刊的严谨+设计的优雅，定量数据的精确可视化' },
+  ]},
+  { icon: '🌊', name: '运动诗学派', count: 4, philosophies: [
+    { num: '05', name: '滚动不是浏览，是旅程', desc: '丝滑的视差滚动，电影化的分镜叙事' },
+    { num: '06', name: '让技术可见化即让技术可理解', desc: '3D粒子系统作为核心元素，实时渲染的数据可视化' },
+    { num: '07', name: '代码即设计师', desc: '生成艺术系统，每次访问都不同的动态图形' },
+    { num: '08', name: '交互即叙事', desc: '荒诞的交互作为隐喻，戏谑的技术实现' },
+  ]},
+  { icon: '📐', name: '网格理性派', count: 4, philosophies: [
+    { num: '09', name: '减少直到不能再减', desc: '极端的减少主义，网格作为所有决策的基础' },
+    { num: '10', name: '网格不是约束，是解放', desc: '数学网格系统的精确运用，功能决定形式' },
+    { num: '11', name: '系统思维驱动设计', desc: '从品牌到界面的完整系统，设计语言的一致性' },
+    { num: '12', name: '设计需要被感受，不只是被看见', desc: '情感化设计，触觉体验的数字化表达' },
+  ]},
+  { icon: '✨', name: '实验视觉派', count: 4, philosophies: [
+    { num: '13', name: '代码是画笔，屏幕是画布', desc: '创意编码的艺术实践，视觉实验的持续输出' },
+    { num: '14', name: '算法是新的美学', desc: '计算生成视觉，数学之美转化为视觉体验' },
+    { num: '15', name: '未来已经到来，只是分布不均', desc: '科幻美学的设计实践，概念与执行的极致平衡' },
+    { num: '16', name: '屏幕是新的画框', desc: '电影级视觉叙事，动态影像作为设计语言' },
+  ]},
+  { icon: '🤍', name: '留白哲思派', count: 4, philosophies: [
+    { num: '17', name: '技术应消失于无形', desc: '设计工程的极致化，让用户忘记技术的存在' },
+    { num: '18', name: '空即是充', desc: '空的哲学，白色作为最丰富的颜色' },
+    { num: '19', name: '书是可触碰的网站', desc: '极端的内容密度的优雅呈现，版面编排作为艺术' },
+    { num: '20', name: '新中式设计语言', desc: '东方美学的数字化翻译，留白、气韵、意境' },
+  ]},
+];
+const capabilities = [
+  { icon: '🎬', name: '产品发布动画', time: '3-10 MIN', desc: '从一句话到电影级产品发布视频，含动态排版、品牌演绎和音频同步' },
+  { icon: '📱', name: '可点击 App 原型', time: '5-15 MIN', desc: 'iOS/Android 真实框架内的可交互原型，含导航流和状态切换' },
+  { icon: '📊', name: '可编辑 PPT', time: '3-8 MIN', desc: 'PowerPoint 兼容的演示文稿，可在 Office/WPS 中直接编辑' },
+  { icon: '📈', name: '印刷级信息图', time: '5-15 MIN', desc: '数据驱动的可视化信息图，适合印刷和屏幕双场景' },
+  { icon: '🎨', name: '品牌设计系统', time: '10-20 MIN', desc: '完整的品牌视觉系统，从色彩到字体到组件库' },
+  { icon: '🔍', name: '设计评审', time: '3-5 MIN', desc: '专业级设计评审与优化建议，基于20条设计哲学体系' },
+];
+const workflows = [
+  { title: '输入意图', desc: '用一句话描述你想要的设计：产品动画、App 原型、PPT、信息图……' },
+  { title: '选择风格', desc: '从 20 种设计哲学中选择风格方向，或让 Agent 根据场景自动匹配' },
+  { title: 'Agent 执行', desc: 'Agent 读取品牌资产、选择模板、生成代码/图片，自动迭代优化' },
+  { title: '交付成品', desc: '3-30 分钟后收到可交付的设计文件，可直接使用或继续微调' },
+];
+const demos = [
+  { tag: 'PROTOTYPE', name: 'iOS 可点击原型', color: 'linear-gradient(135deg, #1a1a2e, #16213e)' },
+  { tag: 'SLIDES', name: '品牌演示文稿', color: 'linear-gradient(135deg, #1a1a1a, #2d1b14)' },
+  { tag: 'MOTION', name: '产品发布动画', color: 'linear-gradient(135deg, #0f0f0f, #1b1418)' },
+  { tag: 'INFOGRAPHIC', name: '数据信息图', color: 'linear-gradient(135deg, #0d1117, #161b22)' },
+  { tag: 'TWEAKS', name: '设计微调', color: 'linear-gradient(135deg, #121212, #1a1520)' },
+  { tag: 'REVIEW', name: '专业设计评审', color: 'linear-gradient(135deg, #0a0a0a, #1a1510)' },
+];
+function renderSchools() {
+  const grid = document.getElementById('schoolGrid');
+  grid.innerHTML = schools.map((s, i) => `<div class="school-card ${i===0?'active':''}" onclick="selectSchool(${i})"><div class="icon">${s.icon}</div><div class="name">${s.name}</div><div class="count">${s.count} 条哲学</div></div>`).join('');
+}
+function renderPhilosophies(index) {
+  const list = document.getElementById('philosophyList');
+  const p = schools[index].philosophies;
+  list.innerHTML = p.map(item => `<div class="philosophy-card"><div class="num">${item.num}</div><div><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div></div>`).join('');
+}
+function selectSchool(index) {
+  document.querySelectorAll('.school-card').forEach((c, i) => c.classList.toggle('active', i === index));
+  renderPhilosophies(index);
+}
+function renderCapabilities() {
+  document.getElementById('capabilityGrid').innerHTML = capabilities.map(c => `<div class="capability-card"><div class="icon">${c.icon}</div><div class="name">${c.name}</div><div class="time">${c.time}</div><div class="desc">${c.desc}</div></div>`).join('');
+}
+function renderWorkflows() {
+  document.getElementById('workflowSteps').innerHTML = workflows.map((w, i) => `<div class="step" data-step="${i+1}"><div class="title">${w.title}</div><div class="desc">${w.desc}</div></div>`).join('');
+}
+function renderDemos() {
+  document.getElementById('demoGrid').innerHTML = demos.map(d => `<div class="demo-card" style="background:${d.color}"><div class="demo-bg"></div><div class="demo-content"><div class="demo-tag">${d.tag}</div><div class="demo-name">${d.name}</div><div class="demo-cta">查看详情 <span class="arrow">→</span></div></div></div>`).join('');
+}
+function initScrollReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+}
+renderSchools(); renderPhilosophies(0); renderCapabilities(); renderWorkflows(); renderDemos(); initScrollReveal();
+</script>
+</body>
+</html>
