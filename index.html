@@ -3,515 +3,648 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Xi Design · 打字。回车。一份能交付的设计。</title>
+<title>Xi Design · AI 设计工坊</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300..700;1,8..60,300..700&family=Noto+Serif+SC:wght@300;400;500;600&family=Inter:wght@100;200;300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #000000;
-  --ink: #FFFFFF;
-  --ink-80: rgba(255,255,255,0.82);
-  --ink-60: rgba(255,255,255,0.58);
-  --muted: rgba(255,255,255,0.40);
-  --dim: rgba(255,255,255,0.18);
-  --hairline: rgba(255,255,255,0.12);
-  --accent: #D97757;
-  --accent-deep: #B85D3D;
-  --serif-en: "Source Serif 4", Georgia, serif;
-  --serif-cn: "Noto Serif SC", "Songti SC", serif;
-  --sans: "Inter", -apple-system, "PingFang SC", sans-serif;
-  --mono: "JetBrains Mono", "SF Mono", ui-monospace, monospace;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
-}
-body::after {
-  content: '';
-  position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='0.4'/></svg>");
-  opacity: 0.02;
-  pointer-events: none;
-  mix-blend-mode: overlay;
-  z-index: 1000;
-}
-.watermark {
-  position: fixed; top: 24px; left: 32px;
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.2em; color: rgba(255,255,255,0.12);
-  text-transform: uppercase; z-index: 999;
-  pointer-events: none;
-}
-nav {
-  position: fixed; top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 20px 40px;
-  display: flex; align-items: center; justify-content: space-between;
-  background: rgba(0,0,0,0.6);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--hairline);
-}
-nav .logo {
-  font-family: var(--mono); font-size: 14px;
-  letter-spacing: 0.15em; color: var(--accent);
-}
-nav .links { display: flex; gap: 32px; }
-nav .links a {
-  color: var(--ink-60); text-decoration: none;
-  font-size: 13px; letter-spacing: 0.05em;
-  transition: color 0.3s;
-}
-nav .links a:hover { color: var(--ink); }
-.hero {
-  min-height: 100vh;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  text-align: center;
-  padding: 120px 40px 80px;
-  position: relative;
-}
-.hero-badge {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.3em; color: var(--accent);
-  margin-bottom: 40px;
-  padding: 8px 20px;
-  border: 1px solid rgba(217,119,87,0.3);
-  border-radius: 100px;
-}
-.hero-title {
-  font-family: var(--serif-cn);
-  font-size: clamp(48px, 8vw, 96px);
-  font-weight: 400;
-  line-height: 1.15;
-  margin-bottom: 8px;
-  opacity: 0;
-  transform: translateY(30px);
-  animation: fadeUp 1s ease forwards;
-}
-.hero-title.accent {
-  color: var(--accent);
-  animation-delay: 0.2s;
-}
-.hero-desc {
-  max-width: 560px;
-  font-size: 17px; line-height: 1.8;
-  color: var(--ink-60);
-  margin-top: 32px;
-  opacity: 0;
-  animation: fadeUp 1s ease 0.4s forwards;
-}
-.hero-actions {
-  display: flex; gap: 16px; margin-top: 48px;
-  opacity: 0;
-  animation: fadeUp 1s ease 0.6s forwards;
-}
-.btn-primary, .btn-secondary {
-  padding: 14px 36px;
-  border-radius: 8px;
-  font-size: 15px; font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s;
-  text-decoration: none;
-}
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-}
-.btn-primary:hover { background: var(--accent-deep); transform: translateY(-2px); }
-.btn-secondary {
-  background: transparent;
-  color: var(--ink-60);
-  border: 1px solid var(--hairline);
-}
-.btn-secondary:hover { border-color: var(--ink-60); color: var(--ink); }
-.scroll-hint {
-  position: absolute; bottom: 40px;
-  display: flex; flex-direction: column; align-items: center; gap: 8px;
-  color: var(--dim); font-size: 12px;
-  animation: pulse 2s ease infinite;
-}
-.scroll-hint .arrow {
-  width: 1px; height: 40px;
-  background: linear-gradient(to bottom, transparent, var(--dim));
-}
-section {
-  padding: 120px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.section-label {
-  font-family: var(--mono); font-size: 11px;
-  letter-spacing: 0.3em; color: var(--accent);
-  margin-bottom: 16px;
-}
-.section-title {
-  font-family: var(--serif-cn);
-  font-size: clamp(32px, 4vw, 48px);
-  font-weight: 400;
-  margin-bottom: 64px;
-  line-height: 1.3;
-}
-.school-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-bottom: 48px;
-}
-.school-card {
-  padding: 24px;
-  border: 1px solid var(--hairline);
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s;
-}
-.school-card:hover, .school-card.active {
-  border-color: var(--accent);
-  background: rgba(217,119,87,0.06);
-}
-.school-card .icon { font-size: 28px; margin-bottom: 12px; }
-.school-card .name { font-weight: 500; margin-bottom: 4px; }
-.school-card .count { font-size: 13px; color: var(--muted); }
-.philosophy-list {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-  gap: 16px;
-}
-.philosophy-card {
-  display: flex; gap: 16px;
-  padding: 20px;
-  border: 1px solid var(--hairline);
-  border-radius: 10px;
-  transition: all 0.3s;
-}
-.philosophy-card:hover { border-color: rgba(255,255,255,0.2); }
-.philosophy-card .num {
-  font-family: var(--mono); font-size: 13px;
-  color: var(--accent); min-width: 28px;
-  padding-top: 2px;
-}
-.philosophy-card .name { font-weight: 500; margin-bottom: 4px; }
-.philosophy-card .desc { font-size: 14px; color: var(--ink-60); line-height: 1.6; }
-.capability-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: 20px;
-}
-.capability-card {
-  padding: 32px;
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  transition: all 0.4s;
-  position: relative;
-  overflow: hidden;
-}
-.capability-card::before {
-  content: '';
-  position: absolute; top: 0; left: 0;
-  width: 100%; height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-.capability-card:hover::before { opacity: 1; }
-.capability-card:hover { border-color: rgba(217,119,87,0.3); transform: translateY(-4px); }
-.capability-card .icon { font-size: 36px; margin-bottom: 16px; }
-.capability-card .name { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
-.capability-card .time {
-  font-family: var(--mono); font-size: 12px;
-  color: var(--accent); margin-bottom: 12px;
-}
-.capability-card .desc { font-size: 14px; color: var(--ink-60); line-height: 1.7; }
-.workflow-steps {
-  display: flex; flex-direction: column; gap: 0;
-  position: relative;
-  padding-left: 40px;
-}
-.workflow-steps::before {
-  content: '';
-  position: absolute; left: 15px; top: 0;
-  width: 1px; height: 100%;
-  background: linear-gradient(to bottom, var(--accent), var(--hairline), transparent);
-}
-.step {
-  position: relative;
-  padding: 24px 0;
-}
-.step::before {
-  content: attr(data-step);
-  position: absolute; left: -40px; top: 24px;
-  width: 30px; height: 30px;
-  border-radius: 50%;
-  background: var(--bg);
-  border: 2px solid var(--accent);
-  display: flex; align-items: center; justify-content: center;
-  font-family: var(--mono); font-size: 12px; color: var(--accent);
-}
-.step .title { font-weight: 600; font-size: 17px; margin-bottom: 6px; }
-.step .desc { font-size: 14px; color: var(--ink-60); line-height: 1.7; max-width: 600px; }
-.demo-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
-  gap: 20px;
-}
-.demo-card {
-  position: relative;
-  border: 1px solid var(--hairline);
-  border-radius: 14px;
-  overflow: hidden;
-  aspect-ratio: 16/10;
-  cursor: pointer;
-  transition: all 0.4s;
-}
-.demo-card:hover { border-color: rgba(217,119,87,0.4); transform: translateY(-4px); }
-.demo-card .demo-bg {
-  position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(217,119,87,0.1), rgba(217,119,87,0.02));
-}
-.demo-card .demo-content {
-  position: absolute; inset: 0;
-  padding: 28px;
-  display: flex; flex-direction: column; justify-content: flex-end;
-}
-.demo-card .demo-tag {
-  font-family: var(--mono); font-size: 10px;
-  letter-spacing: 0.2em; color: var(--accent);
-  margin-bottom: 8px;
-}
-.demo-card .demo-name { font-size: 20px; font-weight: 500; }
-.demo-card .demo-cta {
-  margin-top: 12px;
-  font-size: 13px; color: var(--ink-60);
-  display: flex; align-items: center; gap: 6px;
-}
-.demo-card .demo-cta .arrow { transition: transform 0.3s; }
-.demo-card:hover .demo-cta .arrow { transform: translateX(4px); }
-.cta-section {
-  text-align: center;
-  padding: 160px 40px;
-  position: relative;
-}
-.cta-section::before {
-  content: '';
-  position: absolute; top: 50%; left: 50%;
-  width: 600px; height: 600px;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(circle, rgba(217,119,87,0.08) 0%, transparent 70%);
-  pointer-events: none;
-}
-.cta-title {
-  font-family: var(--serif-cn);
-  font-size: clamp(36px, 5vw, 56px);
-  font-weight: 400;
-  margin-bottom: 24px;
-}
-.cta-desc {
-  font-size: 17px; color: var(--ink-60);
-  max-width: 480px; margin: 0 auto 40px;
-  line-height: 1.8;
-}
-footer {
-  padding: 48px 40px;
-  border-top: 1px solid var(--hairline);
-  display: flex; justify-content: space-between; align-items: center;
-  max-width: 1200px; margin: 0 auto;
-}
-footer .left {
-  font-family: var(--mono); font-size: 12px;
-  color: var(--dim); letter-spacing: 0.1em;
-}
-footer .right { display: flex; gap: 24px; }
-footer .right a {
-  color: var(--muted); text-decoration: none;
-  font-size: 13px; transition: color 0.3s;
-}
-footer .right a:hover { color: var(--ink); }
-@keyframes fadeUp {
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes pulse {
-  0%, 100% { opacity: 0.4; }
-  50% { opacity: 0.8; }
-}
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-@media (max-width: 768px) {
-  nav { padding: 16px 20px; }
-  nav .links { display: none; }
-  section { padding: 80px 20px; }
-  .hero { padding: 100px 20px 60px; }
-  .philosophy-list { grid-template-columns: 1fr; }
-  .capability-grid { grid-template-columns: 1fr; }
-  .demo-grid { grid-template-columns: 1fr; }
-  footer { flex-direction: column; gap: 16px; text-align: center; }
+:root{--bg:#0a0a0a;--surface:#141414;--surface2:#1c1c1c;--ink:#f0ede8;--ink60:rgba(240,237,232,0.6);--ink40:rgba(240,237,232,0.4);--ink20:rgba(240,237,232,0.2);--ink10:rgba(240,237,232,0.1);--accent:#D97757;--accent2:#e8956e;--sans:"Inter",-apple-system,"PingFang SC",sans-serif;--serif:"Source Serif 4","Noto Serif SC",serif;--mono:"JetBrains Mono",monospace;--radius:10px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased;overflow:hidden;height:100vh}
+#app{display:flex;height:100vh}
+
+/* Left Panel - Controls */
+.panel{width:420px;min-width:420px;background:var(--surface);border-right:1px solid var(--ink10);display:flex;flex-direction:column;overflow-y:auto}
+.panel::-webkit-scrollbar{width:4px}
+.panel::-webkit-scrollbar-thumb{background:var(--ink20);border-radius:2px}
+.panel-header{padding:24px 24px 16px;border-bottom:1px solid var(--ink10);position:sticky;top:0;background:var(--surface);z-index:10}
+.panel-header h1{font-family:var(--mono);font-size:13px;letter-spacing:0.15em;color:var(--accent);margin-bottom:4px}
+.panel-header p{font-size:12px;color:var(--ink40)}
+.panel-body{padding:20px 24px;flex:1}
+
+/* Section */
+.section{margin-bottom:28px}
+.section-label{font-family:var(--mono);font-size:10px;letter-spacing:0.2em;color:var(--accent);margin-bottom:10px;text-transform:uppercase}
+.section-title{font-size:15px;font-weight:500;margin-bottom:12px}
+
+/* Prompt input */
+.prompt-area{width:100%;min-height:100px;background:var(--surface2);border:1px solid var(--ink10);border-radius:var(--radius);padding:14px;color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.7;resize:vertical;outline:none;transition:border-color 0.3s}
+.prompt-area:focus{border-color:var(--accent)}
+.prompt-area::placeholder{color:var(--ink20)}
+
+/* Style selector */
+.style-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.style-card{padding:12px;border:1px solid var(--ink10);border-radius:8px;cursor:pointer;transition:all 0.25s;position:relative}
+.style-card:hover{border-color:var(--ink20);background:var(--surface2)}
+.style-card.active{border-color:var(--accent);background:rgba(217,119,87,0.08)}
+.style-card .s-icon{font-size:20px;margin-bottom:6px}
+.style-card .s-name{font-size:12px;font-weight:500}
+.style-card .s-sub{font-size:10px;color:var(--ink40);margin-top:2px}
+
+/* Color palette */
+.palette-row{display:flex;gap:8px;flex-wrap:wrap}
+.palette-swatch{width:36px;height:36px;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all 0.2s}
+.palette-swatch:hover{transform:scale(1.1)}
+.palette-swatch.active{border-color:var(--ink);box-shadow:0 0 0 2px var(--accent)}
+
+/* Scene selector */
+.scene-list{display:flex;flex-direction:column;gap:6px}
+.scene-item{padding:10px 14px;border:1px solid var(--ink10);border-radius:8px;cursor:pointer;transition:all 0.2s;font-size:13px;display:flex;justify-content:space-between;align-items:center}
+.scene-item:hover{border-color:var(--ink20);background:var(--surface2)}
+.scene-item.active{border-color:var(--accent);background:rgba(217,119,87,0.06)}
+.scene-item .tag{font-family:var(--mono);font-size:10px;color:var(--accent)}
+
+/* Generate button */
+.gen-btn{width:100%;padding:14px;background:var(--accent);color:#fff;border:none;border-radius:var(--radius);font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s;font-family:var(--sans);margin-top:8px}
+.gen-btn:hover{background:var(--accent2);transform:translateY(-1px)}
+.gen-btn:active{transform:translateY(0)}
+.gen-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+/* Right Panel - Preview */
+.preview{flex:1;display:flex;flex-direction:column;background:var(--bg)}
+.preview-header{padding:12px 20px;border-bottom:1px solid var(--ink10);display:flex;justify-content:space-between;align-items:center;background:var(--surface)}
+.preview-header .tabs{display:flex;gap:2px}
+.preview-header .tab{padding:6px 14px;border-radius:6px;font-size:12px;color:var(--ink40);cursor:pointer;transition:all 0.2s}
+.preview-header .tab.active{background:var(--surface2);color:var(--ink)}
+.preview-header .tab:hover{color:var(--ink60)}
+.preview-header .actions{display:flex;gap:8px}
+.preview-header .action-btn{padding:6px 12px;border:1px solid var(--ink10);border-radius:6px;font-size:11px;color:var(--ink40);cursor:pointer;background:transparent;transition:all 0.2s}
+.preview-header .action-btn:hover{border-color:var(--ink20);color:var(--ink60)}
+.preview-body{flex:1;position:relative;overflow:hidden}
+.preview-frame{width:100%;height:100%;border:none;background:#fff}
+.preview-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--ink20)}
+.preview-empty .big-icon{font-size:64px;margin-bottom:16px;opacity:0.3}
+.preview-empty p{font-size:14px}
+.preview-empty .hint{font-size:12px;margin-top:8px;color:var(--ink10)}
+
+/* Loading */
+.loading-overlay{position:absolute;inset:0;background:rgba(10,10,10,0.85);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:20;opacity:0;pointer-events:none;transition:opacity 0.3s}
+.loading-overlay.show{opacity:1;pointer-events:auto}
+.spinner{width:40px;height:40px;border:2px solid var(--ink10);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-overlay p{color:var(--ink40);font-size:13px}
+
+/* Code view */
+.code-view{position:absolute;inset:0;background:var(--surface);padding:20px;overflow:auto;font-family:var(--mono);font-size:12px;line-height:1.8;color:var(--ink60);display:none}
+.code-view.show{display:block}
+.code-view pre{white-space:pre-wrap;word-break:break-all}
+
+/* Responsive */
+@media(max-width:900px){
+  #app{flex-direction:column}
+  .panel{width:100%;min-width:unset;max-height:50vh;border-right:none;border-bottom:1px solid var(--ink10)}
+  .preview{min-height:50vh}
 }
 </style>
 </head>
 <body>
-<div class="watermark">XI DESIGN</div>
-<nav>
-  <div class="logo">XI DESIGN</div>
-  <div class="links">
-    <a href="#philosophy">设计哲学</a>
-    <a href="#capabilities">核心能力</a>
-    <a href="#workflow">工作流</a>
-    <a href="#demos">演示</a>
+<div id="app">
+  <div class="panel">
+    <div class="panel-header">
+      <h1>XI DESIGN</h1>
+      <p>打字。回车。一份能交付的设计。</p>
+    </div>
+    <div class="panel-body">
+
+      <div class="section">
+        <div class="section-label">PROMPT</div>
+        <textarea class="prompt-area" id="promptInput" placeholder="描述你想要的设计，例如：&#10;&#10;一个极简风格的产品发布页面，黑色背景，展示智能手表，强调科技感与高级感"></textarea>
+      </div>
+
+      <div class="section">
+        <div class="section-label">STYLE</div>
+        <div class="style-grid" id="styleGrid"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">PALETTE</div>
+        <div class="palette-row" id="paletteRow"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-label">SCENE</div>
+        <div class="scene-list" id="sceneList"></div>
+      </div>
+
+      <button class="gen-btn" id="genBtn" onclick="generate()">生成设计</button>
+    </div>
   </div>
-</nav>
-<section class="hero">
-  <div class="hero-badge">XI DESIGN</div>
-  <h1 class="hero-title">打字。回车。</h1>
-  <h1 class="hero-title accent">一份能交付的设计。</h1>
-  <p class="hero-desc">一句话让 AI 在 3–30 分钟内交付产品发布动画、可点击原型、可编辑 PPT、印刷级信息图。不是「对 AI 来说不错」的质量——看起来像真正的设计团队做的。</p>
-  <div class="hero-actions">
-    <a href="#philosophy" class="btn-primary">开始探索</a>
-    <a href="#demos" class="btn-secondary">查看演示</a>
+
+  <div class="preview">
+    <div class="preview-header">
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('preview',this)">预览</div>
+        <div class="tab" onclick="switchTab('code',this)">代码</div>
+      </div>
+      <div class="actions">
+        <button class="action-btn" onclick="copyCode()">复制代码</button>
+        <button class="action-btn" onclick="downloadHTML()">下载 HTML</button>
+        <button class="action-btn" onclick="openNew()">新窗口打开</button>
+      </div>
+    </div>
+    <div class="preview-body">
+      <div class="preview-empty" id="emptyState">
+        <div class="big-icon">✦</div>
+        <p>输入设计描述，点击生成</p>
+        <div class="hint">支持：产品页 · 原型 · 信息图 · 动画 · PPT</div>
+      </div>
+      <iframe class="preview-frame" id="previewFrame" style="display:none"></iframe>
+      <div class="code-view" id="codeView"><pre id="codeContent"></pre></div>
+      <div class="loading-overlay" id="loading">
+        <div class="spinner"></div>
+        <p id="loadingText">正在生成设计...</p>
+      </div>
+    </div>
   </div>
-  <div class="scroll-hint">
-    <span>SCROLL</span>
-    <div class="arrow"></div>
-  </div>
-</section>
-<section id="philosophy">
-  <div class="reveal">
-    <div class="section-label">DESIGN PHILOSOPHY</div>
-    <h2 class="section-title">20 条设计哲学 · 5 大流派</h2>
-  </div>
-  <div class="reveal school-grid" id="schoolGrid"></div>
-  <div class="reveal philosophy-list" id="philosophyList"></div>
-</section>
-<section id="capabilities">
-  <div class="reveal">
-    <div class="section-label">CAPABILITIES</div>
-    <h2 class="section-title">六大核心能力</h2>
-  </div>
-  <div class="reveal capability-grid" id="capabilityGrid"></div>
-</section>
-<section id="workflow">
-  <div class="reveal">
-    <div class="section-label">WORKFLOW</div>
-    <h2 class="section-title">初级设计师工作流</h2>
-  </div>
-  <div class="reveal workflow-steps" id="workflowSteps"></div>
-</section>
-<section id="demos">
-  <div class="reveal">
-    <div class="section-label">DEMOS</div>
-    <h2 class="section-title">看看它做了什么</h2>
-  </div>
-  <div class="reveal demo-grid" id="demoGrid"></div>
-</section>
-<section class="cta-section">
-  <div class="reveal">
-    <h2 class="cta-title">一句话，交付。</h2>
-    <p class="cta-desc">给你的 Agent 一句话，3 到 30 分钟后，你收到一份能交付的设计。</p>
-    <a href="https://github.com/cozesejin123/xi-design-web" class="btn-primary" target="_blank">GitHub 仓库 →</a>
-  </div>
-</section>
-<footer>
-  <div class="left">XI DESIGN · MIT License</div>
-  <div class="right">
-    <a href="https://github.com/alchaincyf/huashu-design" target="_blank">原项目 Huashu Design</a>
-    <a href="https://github.com/cozesejin123/xi-design-web" target="_blank">GitHub</a>
-  </div>
-</footer>
+</div>
+
 <script>
-const schools = [
-  { icon: '🏛️', name: '信息建筑派', count: 4, philosophies: [
-    { num: '01', name: '字体即语言，网格即思想', desc: '极度克制的颜色，瑞士网格系统的现代演绎，字体排印作为主要视觉语言' },
-    { num: '02', name: '让数据成为可触摸的风景', desc: '地图学思维应用于信息设计，算法生成的有机图形' },
-    { num: '03', name: '设计不是装饰，是内容的建筑', desc: '极端的内容层级清晰度，性能即美学' },
-    { num: '04', name: '每一个像素都必须承载信息', desc: '科学期刊的严谨+设计的优雅，定量数据的精确可视化' },
-  ]},
-  { icon: '🌊', name: '运动诗学派', count: 4, philosophies: [
-    { num: '05', name: '滚动不是浏览，是旅程', desc: '丝滑的视差滚动，电影化的分镜叙事' },
-    { num: '06', name: '让技术可见化即让技术可理解', desc: '3D粒子系统作为核心元素，实时渲染的数据可视化' },
-    { num: '07', name: '代码即设计师', desc: '生成艺术系统，每次访问都不同的动态图形' },
-    { num: '08', name: '交互即叙事', desc: '荒诞的交互作为隐喻，戏谑的技术实现' },
-  ]},
-  { icon: '📐', name: '网格理性派', count: 4, philosophies: [
-    { num: '09', name: '减少直到不能再减', desc: '极端的减少主义，网格作为所有决策的基础' },
-    { num: '10', name: '网格不是约束，是解放', desc: '数学网格系统的精确运用，功能决定形式' },
-    { num: '11', name: '系统思维驱动设计', desc: '从品牌到界面的完整系统，设计语言的一致性' },
-    { num: '12', name: '设计需要被感受，不只是被看见', desc: '情感化设计，触觉体验的数字化表达' },
-  ]},
-  { icon: '✨', name: '实验视觉派', count: 4, philosophies: [
-    { num: '13', name: '代码是画笔，屏幕是画布', desc: '创意编码的艺术实践，视觉实验的持续输出' },
-    { num: '14', name: '算法是新的美学', desc: '计算生成视觉，数学之美转化为视觉体验' },
-    { num: '15', name: '未来已经到来，只是分布不均', desc: '科幻美学的设计实践，概念与执行的极致平衡' },
-    { num: '16', name: '屏幕是新的画框', desc: '电影级视觉叙事，动态影像作为设计语言' },
-  ]},
-  { icon: '🤍', name: '留白哲思派', count: 4, philosophies: [
-    { num: '17', name: '技术应消失于无形', desc: '设计工程的极致化，让用户忘记技术的存在' },
-    { num: '18', name: '空即是充', desc: '空的哲学，白色作为最丰富的颜色' },
-    { num: '19', name: '书是可触碰的网站', desc: '极端的内容密度的优雅呈现，版面编排作为艺术' },
-    { num: '20', name: '新中式设计语言', desc: '东方美学的数字化翻译，留白、气韵、意境' },
-  ]},
+// Styles data
+const styles = [
+  {id:'pentagram',icon:'🏛️',name:'Pentagram',sub:'瑞士网格·极简',font:'Helvetica Neue, Inter, sans-serif',grid:'12-col',whitespace:'60%+'},
+  {id:'stamen',icon:'🗺️',name:'Stamen',sub:'数据诗学·地图',font:'Inter, sans-serif',grid:'organic',whitespace:'40%'},
+  {id:'locomotive',icon:'🌊',name:'Locomotive',sub:'滚动叙事·电影',font:'Inter, sans-serif',grid:'cinematic',whitespace:'50%'},
+  {id:'active-theory',icon:'✨',name:'Active Theory',sub:'WebGL·粒子',font:'Inter, JetBrains Mono',grid:'fluid',whitespace:'70%'},
+  {id:'mueller',icon:'📐',name:'Müller-Brockmann',sub:'数学网格·理性',font:'Helvetica Neue, sans-serif',grid:'modular',whitespace:'55%'},
+  {id:'kenya-hara',icon:'🤍',name:'Kenya Hara',sub:'留白·空的设计',font:'Noto Serif SC, serif',grid:'asymmetric',whitespace:'70%+'},
+  {id:'sagmeister',icon:'🎭',name:'Sagmeister',sub:'情感化·实验',font:'Custom display, sans-serif',grid:'break',whitespace:'30%'},
+  {id:'neo-shen',icon:'🏮',name:'Neo Shen',sub:'新中式·意境',font:'Noto Serif SC, serif',grid:'golden-ratio',whitespace:'65%'},
 ];
-const capabilities = [
-  { icon: '🎬', name: '产品发布动画', time: '3-10 MIN', desc: '从一句话到电影级产品发布视频，含动态排版、品牌演绎和音频同步' },
-  { icon: '📱', name: '可点击 App 原型', time: '5-15 MIN', desc: 'iOS/Android 真实框架内的可交互原型，含导航流和状态切换' },
-  { icon: '📊', name: '可编辑 PPT', time: '3-8 MIN', desc: 'PowerPoint 兼容的演示文稿，可在 Office/WPS 中直接编辑' },
-  { icon: '📈', name: '印刷级信息图', time: '5-15 MIN', desc: '数据驱动的可视化信息图，适合印刷和屏幕双场景' },
-  { icon: '🎨', name: '品牌设计系统', time: '10-20 MIN', desc: '完整的品牌视觉系统，从色彩到字体到组件库' },
-  { icon: '🔍', name: '设计评审', time: '3-5 MIN', desc: '专业级设计评审与优化建议，基于20条设计哲学体系' },
+
+const palettes = [
+  {id:'dark-accent',colors:['#0a0a0a','#1a1a1a','#D97757','#f0ede8','#8B867E'],bg:'#0a0a0a',ink:'#f0ede8',accent:'#D97757'},
+  {id:'mono',colors:['#000000','#333333','#666666','#999999','#ffffff'],bg:'#000000',ink:'#ffffff',accent:'#ffffff'},
+  {id:'ocean',colors:['#0d1b2a','#1b2838','#415a77','#778da9','#e0e1dd'],bg:'#0d1b2a',ink:'#e0e1dd',accent:'#778da9'},
+  {id:'forest',colors:['#1a2e1a','#2d4a3a','#4a7c59','#8bbf7e','#f0f5ec'],bg:'#1a2e1a',ink:'#f0f5ec',accent:'#8bbf7e'},
+  {id:'warm',colors:['#2d1b14','#4a2c20','#8b5e3c','#d4a574','#f5ece3'],bg:'#2d1b14',ink:'#f5ece3',accent:'#d4a574'},
+  {id:'neon',colors:['#0a0a0a','#1a0a2e','#00ffaa','#ff006e','#ffffff'],bg:'#0a0a0a',ink:'#ffffff',accent:'#00ffaa'},
+  {id:'paper',colors:['#f5f4f0','#e8e4dc','#1a1918','#8b867e','#2d4a3a'],bg:'#f5f4f0',ink:'#1a1918',accent:'#2d4a3a'},
+  {id:'terracotta',colors:['#1a1210','#3d2b22','#c67b5c','#e8a882','#faebd7'],bg:'#1a1210',ink:'#faebd7',accent:'#c67b5c'},
 ];
-const workflows = [
-  { title: '输入意图', desc: '用一句话描述你想要的设计：产品动画、App 原型、PPT、信息图……' },
-  { title: '选择风格', desc: '从 20 种设计哲学中选择风格方向，或让 Agent 根据场景自动匹配' },
-  { title: 'Agent 执行', desc: 'Agent 读取品牌资产、选择模板、生成代码/图片，自动迭代优化' },
-  { title: '交付成品', desc: '3-30 分钟后收到可交付的设计文件，可直接使用或继续微调' },
+
+const scenes = [
+  {id:'landing',name:'产品落地页',tag:'LANDING'},
+  {id:'prototype',name:'App 原型',tag:'PROTOTYPE'},
+  {id:'infographic',name:'信息图',tag:'INFOGRAPHIC'},
+  {id:'animation',name:'产品动画',tag:'MOTION'},
+  {id:'slides',name:'演示文稿',tag:'SLIDES'},
+  {id:'brand',name:'品牌系统',tag:'BRAND'},
 ];
-const demos = [
-  { tag: 'PROTOTYPE', name: 'iOS 可点击原型', color: 'linear-gradient(135deg, #1a1a2e, #16213e)' },
-  { tag: 'SLIDES', name: '品牌演示文稿', color: 'linear-gradient(135deg, #1a1a1a, #2d1b14)' },
-  { tag: 'MOTION', name: '产品发布动画', color: 'linear-gradient(135deg, #0f0f0f, #1b1418)' },
-  { tag: 'INFOGRAPHIC', name: '数据信息图', color: 'linear-gradient(135deg, #0d1117, #161b22)' },
-  { tag: 'TWEAKS', name: '设计微调', color: 'linear-gradient(135deg, #121212, #1a1520)' },
-  { tag: 'REVIEW', name: '专业设计评审', color: 'linear-gradient(135deg, #0a0a0a, #1a1510)' },
-];
-function renderSchools() {
-  const grid = document.getElementById('schoolGrid');
-  grid.innerHTML = schools.map((s, i) => `<div class="school-card ${i===0?'active':''}" onclick="selectSchool(${i})"><div class="icon">${s.icon}</div><div class="name">${s.name}</div><div class="count">${s.count} 条哲学</div></div>`).join('');
+
+let currentStyle = 'pentagram';
+let currentPalette = 'dark-accent';
+let currentScene = 'landing';
+let generatedCode = '';
+
+// Render controls
+function renderStyles() {
+  document.getElementById('styleGrid').innerHTML = styles.map(s =>
+    `<div class="style-card ${s.id===currentStyle?'active':''}" onclick="selectStyle('${s.id}')">
+      <div class="s-icon">${s.icon}</div>
+      <div class="s-name">${s.name}</div>
+      <div class="s-sub">${s.sub}</div>
+    </div>`
+  ).join('');
 }
-function renderPhilosophies(index) {
-  const list = document.getElementById('philosophyList');
-  const p = schools[index].philosophies;
-  list.innerHTML = p.map(item => `<div class="philosophy-card"><div class="num">${item.num}</div><div><div class="name">${item.name}</div><div class="desc">${item.desc}</div></div></div>`).join('');
+function renderPalettes() {
+  document.getElementById('paletteRow').innerHTML = palettes.map(p =>
+    `<div class="palette-swatch ${p.id===currentPalette?'active':''}" 
+          style="background:linear-gradient(135deg,${p.colors[0]} 0%,${p.colors[2]} 50%,${p.colors[4]} 100%)"
+          onclick="selectPalette('${p.id}')" title="${p.id}"></div>`
+  ).join('');
 }
-function selectSchool(index) {
-  document.querySelectorAll('.school-card').forEach((c, i) => c.classList.toggle('active', i === index));
-  renderPhilosophies(index);
+function renderScenes() {
+  document.getElementById('sceneList').innerHTML = scenes.map(s =>
+    `<div class="scene-item ${s.id===currentScene?'active':''}" onclick="selectScene('${s.id}')">
+      <span>${s.name}</span>
+      <span class="tag">${s.tag}</span>
+    </div>`
+  ).join('');
 }
-function renderCapabilities() {
-  document.getElementById('capabilityGrid').innerHTML = capabilities.map(c => `<div class="capability-card"><div class="icon">${c.icon}</div><div class="name">${c.name}</div><div class="time">${c.time}</div><div class="desc">${c.desc}</div></div>`).join('');
+function selectStyle(id){currentStyle=id;renderStyles();}
+function selectPalette(id){currentPalette=id;renderPalettes();}
+function selectScene(id){currentScene=id;renderScenes();}
+
+// Tab switching
+function switchTab(tab,el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  const frame=document.getElementById('previewFrame');
+  const code=document.getElementById('codeView');
+  if(tab==='preview'){frame.style.display='block';code.classList.remove('show');}
+  else{frame.style.display='none';code.classList.add('show');document.getElementById('codeContent').textContent=generatedCode;}
 }
-function renderWorkflows() {
-  document.getElementById('workflowSteps').innerHTML = workflows.map((w, i) => `<div class="step" data-step="${i+1}"><div class="title">${w.title}</div><div class="desc">${w.desc}</div></div>`).join('');
+
+// Generate design
+function generate(){
+  const prompt=document.getElementById('promptInput').value.trim();
+  if(!prompt){document.getElementById('promptInput').focus();return;}
+  const style=styles.find(s=>s.id===currentStyle);
+  const palette=palettes.find(p=>p.id===currentPalette);
+  const scene=scenes.find(s=>s.id===currentScene);
+  
+  document.getElementById('loading').classList.add('show');
+  document.getElementById('emptyState').style.display='none';
+  document.getElementById('genBtn').disabled=true;
+  
+  setTimeout(()=>{
+    generatedCode=buildDesign(prompt,style,palette,scene);
+    const frame=document.getElementById('previewFrame');
+    frame.style.display='block';
+    frame.srcdoc=generatedCode;
+    document.getElementById('loading').classList.remove('show');
+    document.getElementById('genBtn').disabled=false;
+  },800+Math.random()*1200);
 }
-function renderDemos() {
-  document.getElementById('demoGrid').innerHTML = demos.map(d => `<div class="demo-card" style="background:${d.color}"><div class="demo-bg"></div><div class="demo-content"><div class="demo-tag">${d.tag}</div><div class="demo-name">${d.name}</div><div class="demo-cta">查看详情 <span class="arrow">→</span></div></div></div>`).join('');
+
+// Design builder - generates complete HTML based on parameters
+function buildDesign(prompt,style,palette,scene){
+  const bg=palette.bg;
+  const ink=palette.ink;
+  const accent=palette.accent;
+  const colors=palette.colors;
+  const font=style.font;
+  const isDark=isColorDark(bg);
+  
+  const templates = {
+    landing: buildLanding,
+    prototype: buildPrototype,
+    infographic: buildInfographic,
+    animation: buildAnimation,
+    slides: buildSlides,
+    brand: buildBrand,
+  };
+  
+  return templates[scene.id](prompt,style,palette);
 }
-function initScrollReveal() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
-  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
-  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+function isColorDark(c){const r=parseInt(c.slice(1,3),16),g=parseInt(c.slice(3,5),16),b=parseInt(c.slice(5,7),16);return(r*299+g*587+b*114)/1000<128;}
+
+function extractKeywords(prompt){
+  const keywords={product:'产品',tech:false,minimal:false,bold:false,elegant:false,playful:false};
+  const t=prompt.toLowerCase();
+  if(/科技|tech|ai|智能|digital/.test(t))keywords.tech=true;
+  if(/极简|minimal|简约|干净/.test(t))keywords.minimal=true;
+  if(/大胆|bold|强烈|冲击/.test(t))keywords.bold=true;
+  if(/优雅|elegant|精致|高级/.test(t))keywords.elegant=true;
+  if(/有趣|playful|活泼|创意/.test(t))keywords.playful=true;
+  const m=prompt.match(/([\u4e00-\u9fa5]{2,6})(?:手表|手机|应用|平台|系统|App|app|AI|ai)/);
+  if(m)keywords.product=m[1];
+  return keywords;
 }
-renderSchools(); renderPhilosophies(0); renderCapabilities(); renderWorkflows(); renderDemos(); initScrollReveal();
+
+function buildLanding(prompt,style,palette){
+  const bg=palette.bg,ink=palette.ink,accent=palette.accent,colors=palette.colors;
+  const kw=extractKeywords(prompt);
+  const productName=kw.product||'产品';
+  return `<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${productName} - 产品落地页</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+SC:wght@300;400;500;600&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:${bg};--ink:${ink};--accent:${accent};--ink60:${isColorDark(bg)?'rgba('+hexToRgb(ink)+',0.6)':'rgba('+hexToRgb(ink)+',0.6)'};--ink30:${isColorDark(bg)?'rgba('+hexToRgb(ink)+',0.3)':'rgba('+hexToRgb(ink)+',0.3)'};--ink10:${isColorDark(bg)?'rgba('+hexToRgb(ink)+',0.1)':'rgba('+hexToRgb(ink)+',0.1)'};--surface:${colors[1]}}
+body{background:var(--bg);color:var(--ink);font-family:${style.font};-webkit-font-smoothing:antialiased;overflow-x:hidden}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;background:${isColorDark(bg)?'rgba('+hexToRgb(bg)+',0.8)':'rgba('+hexToRgb(bg)+',0.9)'};backdrop-filter:blur(20px);border-bottom:1px solid var(--ink10)}
+nav .logo{font-weight:600;font-size:15px;letter-spacing:0.05em}
+nav .links{display:flex;gap:32px}
+nav .links a{color:var(--ink60);text-decoration:none;font-size:13px;transition:color 0.3s}
+nav .links a:hover{color:var(--ink)}
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 48px 80px;position:relative}
+.hero::before{content:'';position:absolute;top:50%;left:50%;width:800px;height:800px;transform:translate(-50%,-50%);background:radial-gradient(circle,${accent}15 0%,transparent 70%);pointer-events:none}
+.badge{font-size:11px;letter-spacing:0.3em;color:var(--accent);margin-bottom:40px;padding:8px 20px;border:1px solid ${accent}40;border-radius:100px;text-transform:uppercase}
+h1{font-size:clamp(40px,7vw,80px);font-weight:${style.id==='pentagram'||style.id==='mueller'?'500':'300'};line-height:1.15;margin-bottom:16px}
+h1 .accent{color:var(--accent)}
+.subtitle{font-size:18px;color:var(--ink60);max-width:560px;line-height:1.8;margin-bottom:48px}
+.cta-group{display:flex;gap:16px}
+.cta-primary{padding:16px 40px;background:var(--accent);color:${isColorDark(accent)?'#fff':'#fff'};border:none;border-radius:8px;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.3s}
+.cta-primary:hover{opacity:0.85;transform:translateY(-2px)}
+.cta-secondary{padding:16px 40px;background:transparent;color:var(--ink60);border:1px solid var(--ink10);border-radius:8px;font-size:15px;cursor:pointer;transition:all 0.3s}
+.cta-secondary:hover{border-color:var(--ink30)}
+.features{padding:120px 48px;max-width:1200px;margin:0 auto}
+.features-label{font-size:11px;letter-spacing:0.3em;color:var(--accent);margin-bottom:16px;text-transform:uppercase}
+.features h2{font-size:clamp(28px,3vw,42px);font-weight:400;margin-bottom:64px}
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.feat-card{padding:32px;border:1px solid var(--ink10);border-radius:14px;transition:all 0.4s}
+.feat-card:hover{border-color:${accent}40;transform:translateY(-4px)}
+.feat-card .icon{font-size:32px;margin-bottom:16px}
+.feat-card h3{font-size:17px;margin-bottom:8px}
+.feat-card p{font-size:14px;color:var(--ink60);line-height:1.7}
+.stats{padding:80px 48px;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
+.stat-item .num{font-size:48px;font-weight:200;color:var(--accent);margin-bottom:4px}
+.stat-item .label{font-size:13px;color:var(--ink60)}
+footer{padding:48px;border-top:1px solid var(--ink10);text-align:center;font-size:12px;color:var(--ink30)}
+@media(max-width:768px){.feat-grid{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}nav .links{display:none}}
+</style></head><body>
+<nav><div class="logo">${productName.toUpperCase()}</div><div class="links"><a href="#">功能</a><a href="#">定价</a><a href="#">关于</a></div></nav>
+<section class="hero">
+<div class="badge">${productName.toUpperCase()} · 重新定义</div>
+<h1>下一代<br><span class="accent">${productName}</span></h1>
+<p class="subtitle">${prompt.length>20?prompt:'用科技重新想象可能，让每一次交互都成为惊喜'}</p>
+<div class="cta-group"><button class="cta-primary">立即体验</button><button class="cta-secondary">了解更多</button></div>
+</section>
+<section class="features">
+<div class="features-label">FEATURES</div>
+<h2>核心功能</h2>
+<div class="feat-grid">
+<div class="feat-card"><div class="icon">⚡</div><h3>极致性能</h3><p>毫秒级响应，流畅如丝的交互体验</p></div>
+<div class="feat-card"><div class="icon">🎨</div><h3>智能设计</h3><p>AI 驱动的个性化设计引擎</p></div>
+<div class="feat-card"><div class="icon">🔒</div><h3>安全可靠</h3><p>企业级安全架构，数据全程加密</p></div>
+<div class="feat-card"><div class="icon">🌍</div><h3>全球部署</h3><p>边缘节点覆盖，全球用户低延迟访问</p></div>
+<div class="feat-card"><div class="icon">📊</div><h3>数据洞察</h3><p>实时数据分析，驱动业务增长</p></div>
+<div class="feat-card"><div class="icon">🔌</div><h3>开放生态</h3><p>丰富的 API 与插件，无缝集成现有系统</p></div>
+</div>
+</section>
+<section class="stats">
+<div class="stat-item"><div class="num">99.9%</div><div class="label">可用性</div></div>
+<div class="stat-item"><div class="num">50ms</div><div class="label">响应时间</div></div>
+<div class="stat-item"><div class="num">10M+</div><div class="label">活跃用户</div></div>
+<div class="stat-item"><div class="num">200+</div><div class="label">企业客户</div></div>
+</section>
+<footer>© 2026 ${productName} · Crafted with Xi Design</footer>
+</body></html>`;
+}
+
+function buildPrototype(prompt,style,palette){
+  const bg=palette.bg,ink=palette.ink,accent=palette.accent,colors=palette.colors;
+  const kw=extractKeywords(prompt);const name=kw.product||'App';
+  const screenBg=isColorDark(bg)?'#1c1c1e':'#ffffff';
+  const screenInk=isColorDark(bg)?'#ffffff':'#000000';
+  return `<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${name} - App 原型</title><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:${bg};color:${ink};font-family:${style.font};display:flex;align-items:center;justify-content:center;min-height:100vh;-webkit-font-smoothing:antialiased}
+.phone{width:375px;height:812px;border-radius:44px;border:4px solid ${isColorDark(bg)?'#333':'#ccc'};overflow:hidden;background:${screenBg};position:relative;box-shadow:0 40px 80px rgba(0,0,0,0.4)}
+.notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:160px;height:34px;background:#000;border-radius:0 0 20px 20px;z-index:10}
+.status-bar{height:48px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;font-size:12px;font-weight:600;color:${screenInk};position:relative;z-index:5}
+.screen{height:calc(100% - 48px);overflow-y:auto;padding:20px}
+.screen::-webkit-scrollbar{display:none}
+.nav-bar{display:flex;justify-content:space-around;padding:12px 0;border-top:1px solid ${isColorDark(screenBg)?'#333':'#eee'};position:absolute;bottom:0;left:0;right:0;background:${screenBg}}
+.nav-item{text-align:center;font-size:10px;color:${isColorDark(screenBg)?'#888':'#999'}}
+.nav-item.active{color:${accent}}
+.nav-item .icon{font-size:20px;margin-bottom:2px}
+.hero-card{border-radius:16px;padding:24px;margin-bottom:20px;background:linear-gradient(135deg,${accent},${accent}dd);color:#fff}
+.hero-card h2{font-size:22px;margin-bottom:6px}
+.hero-card p{font-size:13px;opacity:0.8}
+.section-title{font-size:13px;font-weight:600;color:${isColorDark(screenBg)?'#888':'#666'};margin-bottom:12px;letter-spacing:0.05em}
+.card-row{display:flex;gap:12px;margin-bottom:20px;overflow-x:auto}
+.card-row::-webkit-scrollbar{display:none}
+.card{min-width:140px;border-radius:12px;padding:16px;background:${isColorDark(screenBg)?'#2c2c2e':'#f5f5f5'}}
+.card .icon{font-size:24px;margin-bottom:8px}
+.card .name{font-size:14px;font-weight:500;color:${screenInk}}
+.card .sub{font-size:11px;color:${isColorDark(screenBg)?'#888':'#999'};margin-top:2px}
+.list-item{display:flex;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid ${isColorDark(screenBg)?'#2c2c2e':'#f0f0f0'}}
+.list-item .avatar{width:40px;height:40px;border-radius:50%;background:${accent}30;display:flex;align-items:center;justify-content:center;font-size:18px}
+.list-item .info{flex:1}
+.list-item .info .name{font-size:14px;font-weight:500;color:${screenInk}}
+.list-item .info .desc{font-size:12px;color:${isColorDark(screenBg)?'#888':'#999'}}
+.list-item .arrow{color:${isColorDark(screenBg)?'#555':'#ccc'}}
+</style></head><body>
+<div class="phone">
+<div class="notch"></div>
+<div class="status-bar"><span>9:41</span><span>5G ◼</span></div>
+<div class="screen">
+<div class="hero-card"><h2>你好，用户 👋</h2><p>今天想做点什么？</p></div>
+<div class="section-title">快捷功能</div>
+<div class="card-row">
+<div class="card"><div class="icon">📊</div><div class="name">数据分析</div><div class="sub">实时查看</div></div>
+<div class="card"><div class="icon">🎯</div><div class="name">任务管理</div><div class="sub">3 个待办</div></div>
+<div class="card"><div class="icon">💬</div><div class="name">消息中心</div><div class="sub">2 条新消息</div></div>
+</div>
+<div class="section-title">最近动态</div>
+<div class="list-item"><div class="avatar">📈</div><div class="info"><div class="name">月度报告已生成</div><div class="desc">2 小时前</div></div><div class="arrow">›</div></div>
+<div class="list-item"><div class="avatar">🔔</div><div class="info"><div class="name">系统更新提醒</div><div class="desc">5 小时前</div></div><div class="arrow">›</div></div>
+<div class="list-item"><div class="avatar">👥</div><div class="info"><div class="name">团队协作邀请</div><div class="desc">昨天</div></div><div class="arrow">›</div></div>
+<div class="list-item"><div class="avatar">⚡</div><div class="info"><div class="name">性能优化完成</div><div class="desc">2 天前</div></div><div class="arrow">›</div></div>
+</div>
+<div class="nav-bar">
+<div class="nav-item active"><div class="icon">🏠</div>首页</div>
+<div class="nav-item"><div class="icon">🔍</div>发现</div>
+<div class="nav-item"><div class="icon">📌</div>收藏</div>
+<div class="nav-item"><div class="icon">👤</div>我的</div>
+</div>
+</div>
+</body></html>`;
+}
+
+function buildInfographic(prompt,style,palette){
+  const bg=palette.bg,ink=palette.ink,accent=palette.accent,colors=palette.colors;
+  const isDark=isColorDark(bg);
+  return `<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>信息图</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:${bg};color:${ink};font-family:${style.font};padding:60px;-webkit-font-smoothing:antialiased}
+.container{max-width:800px;margin:0 auto}
+.header{text-align:center;margin-bottom:60px}
+.header .tag{font-size:10px;letter-spacing:0.3em;color:${accent};margin-bottom:16px;text-transform:uppercase}
+.header h1{font-size:42px;font-weight:300;line-height:1.3;margin-bottom:16px}
+.header p{font-size:16px;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};max-width:500px;margin:0 auto;line-height:1.7}
+.divider{width:60px;height:2px;background:${accent};margin:40px auto}
+.stat-row{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:48px}
+.stat-box{text-align:center;padding:32px;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.1)':'rgba('+hexToRgb(ink)+',0.1)'};border-radius:14px}
+.stat-box .number{font-size:48px;font-weight:200;color:${accent};margin-bottom:4px}
+.stat-box .unit{font-size:14px;color:${isDark?'rgba('+hexToRgb(ink)+',0.4)':'rgba('+hexToRgb(ink)+',0.4)'};margin-bottom:8px}
+.stat-box .desc{font-size:13px;color:${isDark?'rgba('+hexToRgb(ink)+',0.6)':'rgba('+hexToRgb(ink)+',0.6)'}}
+.bar-section{margin-bottom:48px}
+.bar-section h3{font-size:16px;margin-bottom:20px;font-weight:500}
+.bar-item{margin-bottom:16px}
+.bar-item .bar-label{display:flex;justify-content:space-between;margin-bottom:6px;font-size:13px}
+.bar-item .bar-label span:last-child{color:${accent};font-weight:500}
+.bar-item .bar-track{height:8px;background:${isDark?'rgba('+hexToRgb(ink)+',0.06)':'rgba('+hexToRgb(ink)+',0.06)'};border-radius:4px;overflow:hidden}
+.bar-item .bar-fill{height:100%;background:linear-gradient(90deg,${accent},${accent}cc);border-radius:4px;transition:width 1s ease}
+.timeline{position:relative;padding-left:32px}
+.timeline::before{content:'';position:absolute;left:11px;top:0;width:2px;height:100%;background:${isDark?'rgba('+hexToRgb(ink)+',0.1)':'rgba('+hexToRgb(ink)+',0.1)'}}
+.tl-item{position:relative;padding-bottom:32px}
+.tl-item::before{content:'';position:absolute;left:-32px;top:4px;width:12px;height:12px;border-radius:50%;background:${bg};border:2px solid ${accent}}
+.tl-item .year{font-family:monospace;font-size:12px;color:${accent};margin-bottom:4px}
+.tl-item .title{font-weight:500;margin-bottom:4px}
+.tl-item .desc{font-size:13px;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};line-height:1.6}
+.footer{text-align:center;padding-top:40px;border-top:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.08)':'rgba('+hexToRgb(ink)+',0.08)'};font-size:11px;color:${isDark?'rgba('+hexToRgb(ink)+',0.25)':'rgba('+hexToRgb(ink)+',0.25)'};letter-spacing:0.1em}
+</style></head><body>
+<div class="container">
+<div class="header">
+<div class="tag">DATA VISUALIZATION</div>
+<h1>${prompt.slice(0,30)||'设计工具市场洞察'}</h1>
+<p>数据驱动的行业分析，发现隐藏的增长机会</p>
+</div>
+<div class="divider"></div>
+<div class="stat-row">
+<div class="stat-box"><div class="number">10.2</div><div class="unit">亿月活</div><div class="desc">小程序生态</div></div>
+<div class="stat-box"><div class="number">86%</div><div class="unit">增长率</div><div class="desc">AI 工具类</div></div>
+<div class="stat-box"><div class="number">3.2</div><div class="unit">万亿市场</div><div class="desc">2026年规模</div></div>
+</div>
+<div class="bar-section">
+<h3>各品类增长趋势</h3>
+<div class="bar-item"><div class="bar-label"><span>AI 工具</span><span>186%</span></div><div class="bar-track"><div class="bar-fill" style="width:93%"></div></div></div>
+<div class="bar-item"><div class="bar-label"><span>电商零售</span><span>72%</span></div><div class="bar-track"><div class="bar-fill" style="width:72%"></div></div></div>
+<div class="bar-item"><div class="bar-label"><span>生活服务</span><span>58%</span></div><div class="bar-track"><div class="bar-fill" style="width:58%"></div></div></div>
+<div class="bar-item"><div class="bar-label"><span>社交娱乐</span><span>45%</span></div><div class="bar-track"><div class="bar-fill" style="width:45%"></div></div></div>
+<div class="bar-item"><div class="bar-label"><span>教育学习</span><span>38%</span></div><div class="bar-track"><div class="bar-fill" style="width:38%"></div></div></div>
+</div>
+<div class="bar-section"><h3>发展历程</h3>
+<div class="timeline">
+<div class="tl-item"><div class="year">2023</div><div class="title">ChatGPT 引爆 AI 浪潮</div><div class="desc">大语言模型进入公众视野，AI 工具生态开始萌芽</div></div>
+<div class="tl-item"><div class="year">2024</div><div class="title">AI 原生应用爆发</div><div class="desc">AI 写作、绘图、编程工具百花齐放</div></div>
+<div class="tl-item"><div class="year">2025</div><div class="title">小程序 + AI 融合</div><div class="desc">微信官方推出 AI 小程序扶持计划</div></div>
+<div class="tl-item"><div class="year">2026</div><div class="title">智能化成为标配</div><div class="desc">AI 能力深度融入各类应用，成为基础能力</div></div>
+</div></div>
+<div class="footer">DESIGNED WITH XI DESIGN · DATA SOURCED 2026</div>
+</div></body></html>`;
+}
+
+function buildAnimation(prompt,style,palette){
+  const bg=palette.bg,ink=palette.ink,accent=palette.accent;
+  return `<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>产品动画</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:${bg};color:${ink};font-family:${style.font};overflow:hidden;height:100vh;-webkit-font-smoothing:antialiased}
+.stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.orb{width:200px;height:200px;border-radius:50%;background:radial-gradient(circle at 30% 30%,${accent},${accent}66,transparent);animation:orbPulse 4s ease-in-out infinite;position:relative;box-shadow:0 0 120px ${accent}44,0 0 240px ${accent}22}
+@keyframes orbPulse{0%,100%{transform:scale(1);opacity:0.8}50%{transform:scale(1.15);opacity:1}}
+.ring{position:absolute;border:1px solid ${accent}33;border-radius:50%;animation:ringExpand 3s ease-out infinite}
+.ring:nth-child(1){width:280px;height:280px;animation-delay:0s}
+.ring:nth-child(2){width:380px;height:380px;animation-delay:0.5s}
+.ring:nth-child(3){width:480px;height:480px;animation-delay:1s}
+@keyframes ringExpand{0%{transform:scale(0.8);opacity:0.6}100%{transform:scale(1.2);opacity:0}}
+.text-layer{position:absolute;text-align:center}
+.title{font-size:clamp(32px,5vw,64px);font-weight:200;letter-spacing:0.05em;opacity:0;animation:textIn 1s ease 0.5s forwards}
+.title .accent{color:${accent};font-weight:400}
+.subtitle{font-size:clamp(14px,2vw,18px);color:${isColorDark(bg)?'rgba('+hexToRgb(ink)+',0.4)':'rgba('+hexToRgb(ink)+',0.4)'};margin-top:16px;opacity:0;animation:textIn 1s ease 1s forwards}
+@keyframes textIn{to{opacity:1}}
+.particles{position:absolute;inset:0;overflow:hidden}
+.particle{position:absolute;width:2px;height:2px;background:${accent};border-radius:50%;opacity:0;animation:particleFly 6s linear infinite}
+@keyframes particleFly{0%{opacity:0;transform:translateY(0)}10%{opacity:0.6}90%{opacity:0.6}100%{opacity:0;transform:translateY(-100vh)}}
+.corner{position:absolute;font-size:10px;letter-spacing:0.2em;color:${isColorDark(bg)?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};font-family:monospace}
+.corner.tl{top:24px;left:24px}.corner.tr{top:24px;right:24px}.corner.bl{bottom:24px;left:24px}.corner.br{bottom:24px;right:24px}
+</style></head><body>
+<div class="stage">
+<div class="particles" id="particles"></div>
+<div class="ring"></div><div class="ring"></div><div class="ring"></div>
+<div class="orb"></div>
+<div class="text-layer"><div class="title">重新想象 <span class="accent">设计</span></div><div class="subtitle">${prompt.slice(0,40)||'一句话，交付一份能用的设计'}</div></div>
+<div class="corner tl">XI DESIGN</div><div class="corner tr">2026</div><div class="corner bl">MOTION</div><div class="corner br">V1.0</div>
+</div>
+<script>
+const pc=document.getElementById('particles');
+for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';p.style.left=Math.random()*100+'%';p.style.bottom='-10px';p.style.animationDelay=Math.random()*6+'s';p.style.animationDuration=(4+Math.random()*4)+'s';pc.appendChild(p);}
+</script></body></html>`;
+}
+
+function buildSlides(prompt,style,palette){
+  const bg=palette.bg,ink=palette.ink,accent=palette.accent,colors=palette.colors;
+  const isDark=isColorDark(bg);
+  return `<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>演示文稿</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:${bg};color:${ink};font-family:${style.font};height:100vh;overflow:hidden;-webkit-font-smoothing:antialiased}
+.slide{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:60px;opacity:0;transform:translateX(40px);transition:all 0.6s cubic-bezier(0.16,1,0.3,1)}
+.slide.active{opacity:1;transform:translateX(0)}
+.slide-num{position:absolute;top:24px;left:24px;font-family:monospace;font-size:11px;color:${isDark?'rgba('+hexToRgb(ink)+',0.2)':'rgba('+hexToRgb(ink)+',0.2)'};letter-spacing:0.15em}
+.slide-badge{font-size:10px;letter-spacing:0.3em;color:${accent};margin-bottom:24px;text-transform:uppercase}
+h1{font-size:clamp(36px,6vw,72px);font-weight:200;line-height:1.2;margin-bottom:16px}
+h1 .accent{color:${accent};font-weight:400}
+h2{font-size:clamp(28px,4vw,48px);font-weight:300;margin-bottom:20px}
+.desc{font-size:18px;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};max-width:560px;line-height:1.7}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:800px;margin-top:32px}
+.grid-item{padding:24px;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.1)':'rgba('+hexToRgb(ink)+',0.1)'};border-radius:12px;text-align:left}
+.grid-item .gi-icon{font-size:28px;margin-bottom:12px}
+.grid-item h4{font-size:15px;margin-bottom:6px}
+.grid-item p{font-size:13px;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};line-height:1.6}
+.nav{position:fixed;bottom:32px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100}
+.nav-dot{width:8px;height:8px;border-radius:50%;background:${isDark?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};cursor:pointer;transition:all 0.3s}
+.nav-dot.active{background:${accent};transform:scale(1.3)}
+.controls{position:fixed;bottom:32px;right:32px;display:flex;gap:8px;z-index:100}
+.ctrl-btn{width:40px;height:40px;border-radius:50%;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};background:transparent;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};cursor:pointer;font-size:16px;transition:all 0.3s}
+.ctrl-btn:hover{border-color:${accent};color:${accent}}
+</style></head><body>
+<div class="slide active" id="s0"><div class="slide-num">01 / 04</div><div class="slide-badge">PRESENTATION</div><h1>重新想象<br><span class="accent">设计流程</span></h1><div class="desc">${prompt.slice(0,50)||'用 AI 的力量，让每个人都能成为设计师'}</div></div>
+<div class="slide" id="s1"><div class="slide-num">02 / 04</div><div class="slide-badge">THE PROBLEM</div><h2>传统设计流程的困境</h2><div class="grid-3"><div class="grid-item"><div class="gi-icon">⏰</div><h4>周期漫长</h4><p>从需求到交付动辄数周</p></div><div class="grid-item"><div class="gi-icon">💰</div><h4>成本高昂</h4><p>设计团队人力成本持续攀升</p></div><div class="grid-item"><div class="gi-icon">🔄</div><h4>反复修改</h4><p>沟通成本高，迭代效率低</p></div></div></div>
+<div class="slide" id="s2"><div class="slide-num">03 / 04</div><div class="slide-badge">SOLUTION</div><h2>一句话，<span style="color:${accent}">交付设计</span></h2><div class="desc">输入意图 → 选择风格 → AI 生成 → 直接交付<br>3 到 30 分钟，从想法到成品</div></div>
+<div class="slide" id="s3"><div class="slide-num">04 / 04</div><div class="slide-badge">GET STARTED</div><h1>现在开始</h1><div class="desc">给你的 Agent 一句话，让它帮你交付</div></div>
+<div class="nav" id="navDots"></div>
+<div class="controls"><button class="ctrl-btn" onclick="prevSlide()">‹</button><button class="ctrl-btn" onclick="nextSlide()">›</button></div>
+<script>
+let cur=0,total=4;
+function showSlide(n){cur=Math.max(0,Math.min(total-1,n));for(let i=0;i<total;i++)document.getElementById('s'+i).classList.toggle('active',i===cur);updateDots();}
+function nextSlide(){showSlide(cur+1)}
+function prevSlide(){showSlide(cur-1)}
+function updateDots(){const d=document.getElementById('navDots');d.innerHTML='';for(let i=0;i<total;i++){const dot=document.createElement('div');dot.className='nav-dot'+(i===cur?' active':'');dot.onclick=()=>showSlide(i);d.appendChild(dot);}}
+updateDots();
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')nextSlide();if(e.key==='ArrowLeft')prevSlide();});
+</script></body></html>`;
+}
+
+function buildBrand(prompt,style,palette){
+  const bg=palette.bg,ink=palette.ink,accent=palette.accent,colors=palette.colors;
+  const isDark=isColorDark(bg);
+  const kw=extractKeywords(prompt);const name=(kw.product||'Brand').toUpperCase();
+  return `<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>${name} - 品牌系统</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet"><style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:${bg};color:${ink};font-family:${style.font};padding:60px;-webkit-font-smoothing:antialiased}
+.container{max-width:900px;margin:0 auto}
+.section{margin-bottom:80px}
+.section-label{font-size:10px;letter-spacing:0.3em;color:${accent};margin-bottom:24px;text-transform:uppercase;font-family:monospace}
+.brand-hero{text-align:center;padding:80px 0}
+.brand-hero .name{font-size:72px;font-weight:800;letter-spacing:-0.02em;margin-bottom:8px}
+.brand-hero .name .accent{color:${accent}}
+.brand-hero .tagline{font-size:18px;color:${isDark?'rgba('+hexToRgb(ink)+',0.4)':'rgba('+hexToRgb(ink)+',0.4)'};font-weight:300}
+.color-row{display:flex;gap:16px;flex-wrap:wrap}
+.color-swatch{flex:1;min-width:120px;border-radius:12px;overflow:hidden}
+.color-swatch .fill{height:100px}
+.color-swatch .info{padding:12px;font-size:12px;background:${isDark?'rgba('+hexToRgb(ink)+',0.04)':'rgba('+hexToRgb(ink)+',0.04)'};font-family:monospace}
+.color-swatch .info .label{font-weight:500;margin-bottom:2px;font-family:${style.font}}
+.typo-sample{margin-bottom:24px;padding:24px;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.08)':'rgba('+hexToRgb(ink)+',0.08)'};border-radius:12px}
+.typo-sample .sample{margin-bottom:8px}
+.typo-sample .meta{font-size:11px;color:${isDark?'rgba('+hexToRgb(ink)+',0.3)':'rgba('+hexToRgb(ink)+',0.3)'};font-family:monospace}
+.comp-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+.comp-card{padding:24px;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.08)':'rgba('+hexToRgb(ink)+',0.08)'};border-radius:12px}
+.comp-card h4{font-size:11px;letter-spacing:0.15em;color:${isDark?'rgba('+hexToRgb(ink)+',0.3)':'rgba('+hexToRgb(ink)+',0.3)'};margin-bottom:16px;font-family:monospace;text-transform:uppercase}
+.btn{display:inline-block;padding:10px 24px;border-radius:6px;font-size:13px;cursor:pointer;margin-right:8px;margin-bottom:8px}
+.btn-primary{background:${accent};color:#fff;border:none}
+.btn-outline{background:transparent;border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.2)':'rgba('+hexToRgb(ink)+',0.2)'};color:${ink}}
+.btn-ghost{background:transparent;border:none;color:${accent}}
+.badge{display:inline-block;padding:4px 12px;border-radius:100px;font-size:11px;margin-right:6px;margin-bottom:6px}
+.badge-accent{background:${accent}20;color:${accent}}
+.badge-outline{border:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.15)':'rgba('+hexToRgb(ink)+',0.15)'};color:${isDark?'rgba('+hexToRgb(ink)+',0.6)':'rgba('+hexToRgb(ink)+',0.6)'}'}
+.footer{text-align:center;padding-top:40px;border-top:1px solid ${isDark?'rgba('+hexToRgb(ink)+',0.06)':'rgba('+hexToRgb(ink)+',0.06)'};font-size:11px;color:${isDark?'rgba('+hexToRgb(ink)+',0.2)':'rgba('+hexToRgb(ink)+',0.2)'};letter-spacing:0.1em;font-family:monospace}
+</style></head><body>
+<div class="container">
+<div class="brand-hero"><div class="name">${name} <span class="accent">·</span></div><div class="tagline">${prompt.slice(0,30)||'创新驱动，设计赋能'}</div></div>
+<div class="section"><div class="section-label">COLOR PALETTE</div><div class="color-row">
+<div class="color-swatch"><div class="fill" style="background:${colors[0]}"></div><div class="info"><div class="label">Primary</div>${colors[0]}</div></div>
+<div class="color-swatch"><div class="fill" style="background:${colors[1]}"></div><div class="info"><div class="label">Surface</div>${colors[1]}</div></div>
+<div class="color-swatch"><div class="fill" style="background:${colors[2]}"></div><div class="info"><div class="label">Accent</div>${colors[2]}</div></div>
+<div class="color-swatch"><div class="fill" style="background:${colors[3]}"></div><div class="info"><div class="label">Secondary</div>${colors[3]}</div></div>
+<div class="color-swatch"><div class="fill" style="background:${colors[4]}"></div><div class="info"><div class="label">Base</div>${colors[4]}</div></div>
+</div></div>
+<div class="section"><div class="section-label">TYPOGRAPHY</div>
+<div class="typo-sample"><div class="sample" style="font-size:48px;font-weight:800">Heading 1</div><div class="meta">48px / Weight 800 / ${style.font.split(',')[0]}</div></div>
+<div class="typo-sample"><div class="sample" style="font-size:32px;font-weight:600">Heading 2</div><div class="meta">32px / Weight 600</div></div>
+<div class="typo-sample"><div class="sample" style="font-size:18px;font-weight:400">Body text — 这是一段正文示例，展示字体的可读性和排版节奏感。</div><div class="meta">18px / Weight 400 / Line 1.7</div></div>
+<div class="typo-sample"><div class="sample" style="font-size:13px;font-weight:400;color:${isDark?'rgba('+hexToRgb(ink)+',0.5)':'rgba('+hexToRgb(ink)+',0.5)'};font-family:monospace">CAPTION · 标注文字 · 13px · MONO</div><div class="meta">13px / Weight 400 / Monospace</div></div>
+</div>
+<div class="section"><div class="section-label">COMPONENTS</div><div class="comp-grid">
+<div class="comp-card"><h4>Buttons</h4><button class="btn btn-primary">Primary</button><button class="btn btn-outline">Outline</button><button class="btn btn-ghost">Ghost →</button></div>
+<div class="comp-card"><h4>Badges</h4><span class="badge badge-accent">Active</span><span class="badge badge-outline">Default</span><span class="badge badge-accent">New</span></div>
+</div></div>
+<div class="footer">BRAND SYSTEM · ${name} · XI DESIGN</div>
+</div></body></html>`;
+}
+
+function hexToRgb(hex){const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16);return r+','+g+','+b;}
+
+// Actions
+function copyCode(){
+  if(!generatedCode)return;
+  navigator.clipboard.writeText(generatedCode).then(()=>alert('代码已复制到剪贴板'));
+}
+function downloadHTML(){
+  if(!generatedCode)return;
+  const blob=new Blob([generatedCode],{type:'text/html'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='xi-design.html';a.click();
+}
+function openNew(){
+  if(!generatedCode)return;
+  const w=window.open('','_blank');
+  w.document.write(generatedCode);
+  w.document.close();
+}
+
+// Init
+renderStyles();renderPalettes();renderScenes();
 </script>
 </body>
 </html>
